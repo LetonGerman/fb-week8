@@ -96,6 +96,7 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
           await page.waitForSelector('#inp');
           await page.click('#bt');
           const inpVal = await page.$eval('#inp', (el) => el.value);
+          console.log(inpVal);
           browser.close();
           res.send(inpVal);
     });
