@@ -1,4 +1,4 @@
-export default function appSrc(express, bodyParser, createReadStream, crypto, http, MongoClient) {
+export default function appSrc(express, bodyParser, createReadStream, crypto, http, MongoClient, puppeteer) {
     const app = express();
 
     app.use(function(req, res, next) {
@@ -83,6 +83,21 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
                 res.send(err);
             }
         });
+    });
+
+    app.post('/test/', async (req, res) => {
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          });
+          const page = await browser.newPage();
+          await page.goto(req.query.URL);
+          await page.screenshot({ path: 'example.png' });
+          await page.waitForSelector('#bt');
+          await page.waitForSelector('#inp');
+          page.click('#bt');
+          const inpVal = await page.$eval('#inp', (el) => el.value);
+          browser.close();
+          res.send(inpVal);
     });
 
     app.all('*', (req, res) => {
