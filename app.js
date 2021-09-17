@@ -85,13 +85,12 @@ export default function appSrc(express, bodyParser, createReadStream, crypto, ht
         });
     });
 
-    app.post('/test/', async (req, res) => {
+    app.get('/test/', async (req, res) => {
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
           });
           const page = await browser.newPage();
           await page.goto(req.query.URL);
-          await page.screenshot({ path: 'example.png' });
           await page.waitForSelector('#bt');
           await page.waitForSelector('#inp');
           await page.click('#bt');
